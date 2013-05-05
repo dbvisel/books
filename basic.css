@@ -1,0 +1,336 @@
+/*
+# Ways to improve this:
+#
+# 0) Change to Google Fonts?
+# 1) Make sidenotes appear in right column
+# 2) Table of contents in left column? Javascript?
+# 3) Running headers of some sort?
+#
+#
+@import url("http://fonts.googleapis.com/css?family=Sorts+Mill+Goudy:400italic,400&subset=latin,latin-ext"); 
+*/
+
+/* main sections */
+
+body {
+    background: #cccccc;
+    margin:0px;
+}
+
+.main {
+	background: #fff;
+  color: #000;
+  width: 640px;
+  padding-left: 24px;
+  padding-right: 24px;
+  position:static;
+  margin-left:auto;
+  margin-right:auto;
+  margin-top:0px;
+  margin-bottom:0px;
+  padding:80px;   
+}
+
+.header {
+
+}
+
+.toc, .toccols {
+	display:table;
+	position:static;
+	margin-left:auto;
+	margin-right:auto;
+	padding-top:2em;
+	padding-bottom:2em;
+	padding-left:2em;
+	padding-right:2em;
+	margin-top:4em;
+	margin-bottom:0em;
+	border:1px;
+	border-color:#cccccc;
+	border-style:solid;
+	border-radius:10px;
+}
+
+.toccols {
+	display: inherit;
+	width:600px;
+	column-count: 2;
+	-webkit-column-count: 2; /* Safari and Chrome */
+	-moz-column-count: 2; /* Firefox */
+	column-gap:0px;
+	-moz-column-gap:0px; /* Firefox */
+	-webkit-column-gap:0px; /* Safari and Chrome */
+}
+
+
+.chapter {
+	margin-top:4em;
+  counter-reset: sdnote txtnote 
+}
+
+
+
+/* paragraphs */
+
+
+p,li {
+	color: black;
+	text-align: left;
+	font-family: "Garamond Premier Pro", "Georgia", serif;
+	font-size: 1.5em;
+	line-height: 1.5em;
+	-webkit-margin-before: 0em;
+	-webkit-margin-after: 0em;
+	margin-top:	0em;
+	margin-top:	0em;
+	font-variant-ligatures: common-ligatures;
+	text-rendering: optimizeLegibility;
+	hyphenate: auto;
+	-webkit-hyphens: auto;
+	-moz-hyphens: auto;
+	hyphens: auto;
+}
+
+p + p {
+    text-indent: 2em;
+    margin-top: 0em;
+   }
+
+p.chaptersubhead + p {
+	text-indent: 0em;
+}
+
+p.chapterhead + p {
+	text-indent: 0em;
+}
+
+p.blockquote + p {
+	text-indent:0px;
+}
+
+p.divider + p {
+	text-indent:0px;
+}
+
+.rightaligned {
+	text-align:right;
+}
+
+.blockquote {
+	margin-top:1.5em;
+	margin-bottom:1.5em;
+	margin-left:2em;
+	margin-right:2em;
+	text-indent:0px;
+}
+
+.divider {
+	text-indent:0px;
+	text-align:center;
+	margin-top:1.5em;
+	margin-bottom:1.5em;
+}
+
+/* character formats */
+
+strong {
+	font-weight:bold;
+}
+
+em {
+	font-style:italic;
+}
+
+.smallcaps {
+/*	font-variant:small-caps; */
+	font-size:smaller;
+	text-transform:uppercase;
+	letter-spacing:0.05em;
+	font-style:normal;
+}
+
+.dropcap {  						/* this still doesn't work. */
+	font-size: 2em;
+}
+
+.negativespacing {
+	letter-spacing: -0.1em;
+}
+
+.sanserif {
+	font-family:"Helvetica Neue", "Helvetica", "Arial";
+	font-size: 100%;
+	line-height: 100%;
+
+}
+
+a {
+	color:#666666;
+	text-decoration:none;
+}
+
+a:hover {
+	text-decoration:underline;
+	color:black;
+}
+
+
+
+/* headers */
+
+.title, .subtitle, .subsubtitle, .author, .chapterhead, .chaptersubhead, .date, .end, .translator, .publisher { 
+	text-align:		center;
+	text-indent:	0em;
+	margin-bottom:	1em;
+	column-span:all;
+	-webkit-column-span:all; /* Safari and Chrome */
+	hyphenate: none;
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	hyphens: none;
+}
+
+.title,.chapterhead,.end {
+	font-weight: bold;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+	text-rendering: optimizeSpeed;
+}
+
+.title {
+	font-size: 1.875em;
+	line-height: 1.5em;
+}
+
+.chapterhead,.end {
+	font-size: 1.666em;
+}
+
+.author, .chaptersubhead, .subtitle, .date {
+	font-size: 1.5em;
+}
+
+.subsubtitle, .publisher, .translator {
+	font-size: 1.25em;
+}
+
+.author {
+	font-weight: bold;
+	text-transform: capitalize;
+	margin-top:1em;
+}
+
+.chaptersubhead, .subtitle, .date {
+	font-style: italic;
+}
+
+p.date, p.translator, p.publisher {
+	margin-top:1em;
+}
+
+p.title + p.subtitle {
+	margin-top:-0.5em;
+}
+
+p.chapterhead + p.chaptersubhead {
+	margin-top:-1em;
+}
+
+p.subsubtitle + p.translator {
+	margin-top:-1em;
+}
+
+p.translator + p.publisher {
+	margin-top:-1em;
+}
+
+hr {
+	margin-top:2em;
+	margin-bottom:2em;
+	width:50%;
+}
+
+
+/* toc-specific formatting */
+
+
+ol.romantoc {
+	list-style-type: upper-roman;
+	display:table;
+	position:static;
+	margin-left:auto;
+	margin-right:auto;
+	-webkit-padding-start:0em;
+	-webkit-margin-before: 0em;
+	-webkit-margin-after: 0em;
+	padding-left:4em;
+}
+
+.toccols>ol.romantoc {
+	margin-top:	0em;
+	list-style-type: decimal;
+
+}
+
+.toc,.toccols li {
+	hyphenate: none;
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	hyphens: none;
+}
+
+/* sidenotes */
+
+/* from here: http://stackoverflow.com/questions/6567095/problem-with-floating-sidenotes-in-css */
+/* or take the ones from here: http://www.newrepublic.com/article/112836/saul-friedlanders-franz-kafka-reviewed-billy-giraldi */
+
+
+.tnote {
+    counter-increment:txtnote;
+    text-indent: 0px;
+  }
+
+.tnote:after {
+    position: relative;
+    vertical-align: baseline;
+    top: -0.3em;
+    padding-left: 2px;
+    font-size: 75%;
+    color:red;
+    content: counter(txtnote);
+  }
+
+.floatnote {
+    position: relative;
+    background:white;
+    padding: 0px 0px 0em 0em;
+    display: block;
+    width: 250px;
+    clear: right;
+    float: right;
+    font-size:75%;
+    text-indent:0em;
+}
+
+.floatnote > span {
+    text-align: left;
+    line-height: 1.17em;
+}
+
+.snote {
+    counter-increment: sdnote;
+    text-indent: 0px;
+  }
+
+.snote:after {
+    position: relative;
+    vertical-align: baseline;
+    top: 0em;
+    padding-left: 2px;
+    font-size: 100%;
+    color: red;
+    content: counter(sdnote);
+  }
+
+
