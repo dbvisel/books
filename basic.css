@@ -272,17 +272,17 @@ hr {
 	top:40px; */
 }
 
+.toc ol {
+	text-align:left;
+	font-size: 0.8em;
+	margin-top:4em;
+	max-height:700px;
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
 
 ol.romantoc {
 	list-style-type: upper-roman;
-	text-align:left;
-	font-size:0.8em;
-
-	margin-top:4em;
-	max-height:700px;
-
-	overflow-x: hidden;
-	overflow-y: hidden;
 }
 
 
