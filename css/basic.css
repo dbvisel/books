@@ -14,12 +14,13 @@
 
 /* main sections */
 
+
 body {
   background: #eeeeee;
   margin:0;
 	color: black;
 	text-align: left;
-	font-family: "Hoefler Text", "Garamond Premier Pro", "Georgia", serif;
+	font-family: "Garamond Premier Pro", "Hoefler Text", "Georgia", serif;
 }
 
 .main {
@@ -34,6 +35,7 @@ body {
 	position:relative;
   width: 640px;
   left: 180px;
+	min-height: 100%;
 	background: #fff;
   color: #000;
   padding-top:80px;   
@@ -74,7 +76,7 @@ p,li {
 	text-rendering: optimizeLegibility;
 }
 
-p + p {
+.chapter p + p {
     text-indent: 1.5em;
     margin-top: 0;
    }
@@ -234,15 +236,142 @@ hr {
 	width:50%;
 }
 
+/* poetry */
+
+.poetry {
+		font-family: "Sorts Mill Goudy";
+}
+
+.poetry .header {
+	margin-bottom: 12em;
+}
+
+.poetry .title {
+	font-weight:normal;
+}
+
+.poetry .author {
+	font-weight:normal;
+}
+
+.poem, .poemsection {
+	padding-left:2em;
+	margin-bottom:12em;
+	max-width:640px;
+	position:static;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+.poem p {
+	margin-left:1.5em;
+	text-indent:-1.5em;
+}
+
+.poemsectiontitle {
+	font-size:1.8em;
+	text-align:center;
+	font-style:italic;
+	margin-bottom:3.333em;
+}
+
+.poemtitle {
+	font-size:1.8em;
+	text-align:left;
+	font-size:1.8em;
+	margin-bottom:1.666em;
+	margin-left:1.666em;
+}
+
+.poemsubtitle {
+	text-align:left;
+	font-style:italic;
+	margin-top:-2.25em;
+	margin-bottom:2em;
+}
+
+.poem .poemtitle {
+	margin-left:1.5em;
+	text-indent:0;
+}
+
+.poem .poemsubtitle {
+	margin-left:2em;
+	text-indent:0;
+}
+
+
+
+.epigraph {
+	font-style:italic;
+	margin-bottom:3em;
+	margin-left:3em;
+}
+
+.epigraph p {
+	margin-left:0;
+	text-indent:0;
+}
+
+.stanza {
+	margin-bottom:2em;
+}
+
+.stanzagroup {
+	margin-bottom:2em;
+}
+
+.stanzahead {
+	text-indent:1em;
+	text-align:left;
+	margin-bottom:1em;
+}
+
+.stanzasubhead {
+	font-style:italic;
+	text-indent:1em;
+	text-align:left;
+	margin-top:-1em;
+	margin-bottom:1em;
+}
+
+
+.oneem {
+	margin-right:1em;
+}
+
+.twoem {
+	margin-right:2em;
+}
+
+.fiveem {
+	margin-right:5em;
+}
+
+
+.droppedtext {
+	display:inline-block;
+	position:relative;
+	top:1.5em;
+	height:3em;
+}
+
+.droppedtext2 {
+	display:inline-block;
+	position:relative;
+	top:3em;
+	height:4.5em;
+}
+
 
 /* toc-specific formatting */
 
 .toc {
 	position:fixed;
 	float:left;
-	top:80px;
+	top:0px;
 	width:180px;
-	background:rgba(255,255,255,0.75);
+	background:rgba(255,255,255,1);
 	z-index:2;
 	padding-left:10px;
 	padding-top:10px;
@@ -276,15 +405,44 @@ hr {
 	text-align:left;
 	font-size: 0.8em;
 	margin-top:4em;
-	max-height:700px;
+	max-height:800;
 	overflow-x: hidden;
 	overflow-y: hidden;
+}
+
+.toc ol ol {
+	margin-top:0.3em;
+	font-size:0.7em;
+	margin-left:-2em;
+}
+
+.toc li {
+	line-height:1.2em;
+	margin-bottom:0.3em;
 }
 
 ol.romantoc {
 	list-style-type: upper-roman;
 }
 
+/* progressmeter */
+/* stick this as the last element in .centercolumn */
+
+.progressmeter {
+	position:absolute;
+  left: 720px;
+  top:	0px;
+	width:2px;
+	min-height: 100%;
+	background: rgba(255,255,255,1);
+	background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(0,0,0,1) 100%);
+	background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(255,255,255,1)), color-stop(100%, rgba(0,0,0,1)));
+	background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(0,0,0,1) 100%);
+	background: -o-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(0,0,0,1) 100%);
+	background: -ms-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(0,0,0,1) 100%);
+	background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(0,0,0,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#000000', GradientType=0 );
+}
 
 
 
