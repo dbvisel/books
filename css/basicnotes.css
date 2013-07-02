@@ -1,0 +1,566 @@
+/*
+# Ways to improve this:
+#
+# 0) Change to Google Fonts?
+# 1) Make sidenotes appear in right column
+# 2) Table of contents in left column? Javascript?
+# 3) Running headers of some sort?
+#
+#
+*/
+
+/* @import url("http://fonts.googleapis.com/css?family=Sorts+Mill+Goudy:400italic,400&subset=latin,latin-ext");  */
+
+
+/* main sections */
+
+/*              main column width: 1280px             */
+/* left: 180px  middle: 40px+640px+40px  right: 380px */
+
+body {
+  background: #eeeeee;
+  margin:0;
+  color: black;
+	text-align: left;
+	font-family: "Sorts Mill Goudy", "Garamond Premier Pro", "Hoefler Text", "Georgia", serif;
+}
+
+.main {
+  margin-top:0;
+  margin-bottom:0;
+  width:1280px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+.centercolumn {
+	position:relative;
+  width: 640px;
+  left: 180px;
+	min-height: 100%;
+	background: #fff;
+  color: #000;
+  padding-top:80px;   
+  padding-bottom:80px; 
+  padding-left:40px;
+  padding-right:40px;
+  z-index:1;
+	-webkit-hyphens: auto;
+	-moz-hyphens: auto;
+	-epub-hyphens: auto;
+	hyphens: auto;
+}
+
+.header {
+
+}
+
+.chapter {
+	z-index:1;
+	margin-top:4em;
+  counter-reset: sdnote txtnote 
+}
+
+
+
+/* paragraphs */
+
+
+p,li {
+	font-size: 1.4em;
+	line-height: 1.5em;
+	-webkit-margin-before: 0;
+	-webkit-margin-after: 0;
+	-moz-margin-before: 0;
+	-moz-margin-after: 0;
+	margin-top:	0;
+	font-variant-ligatures: common-ligatures;
+	text-rendering: optimizeLegibility;
+}
+
+.chapter p + p {
+    text-indent: 1.5em;
+    margin-top: 0;
+   }
+
+p.chaptersubhead + p {
+	text-indent: 0;
+}
+
+p.chapterhead + p {
+	text-indent: 0;
+}
+
+p.blockquote + p {
+	text-indent:0;
+}
+
+p.divider + p {
+	text-indent:0;
+}
+
+.rightaligned {
+	text-align:right;
+}
+
+.blockquote {
+	margin-top:1.5em;
+	margin-bottom:1.5em;
+	margin-left:2em;
+	margin-right:2em;
+	text-indent:0;
+}
+
+.divider {
+	text-indent:0;
+	text-align:center;
+	margin-top:1.5em;
+	margin-bottom:1.5em;
+}
+
+/* character formats */
+
+strong {
+	font-weight:bold;
+}
+
+em {
+	font-style:italic;
+}
+
+.smallcaps {
+/*	font-variant:small-caps; */
+	font-size:smaller;
+	text-transform:uppercase;
+	letter-spacing:0.05em;
+	font-style:normal;
+}
+
+.dropcap {  						/* this still doesn't work. */
+	font-size: 2em;
+}
+
+.negativespacing {
+	letter-spacing: -0.1em;
+}
+
+.sanserif {
+	font-family:"Helvetica Neue", "Helvetica", "Arial";
+	font-size: 100%;
+	line-height: 100%;
+
+}
+
+a {
+	color:#666666;
+	text-decoration:none;
+}
+
+a:hover {
+	text-decoration:underline;
+	color:black;
+}
+
+
+
+/* headers */
+
+.title, .subtitle, .subsubtitle, .author, .chapterhead, .chaptersubhead, .date, .end, .translator, .publisher { 
+	text-align: center;
+	text-indent: 0;
+	margin-bottom: 1em;
+	-moz-column-span:all; /* Safari and Chrome */
+	-webkit-column-span:all; /* Safari and Chrome */
+	column-span:all;
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-epub-hyphens: none;
+	hyphens: none;
+}
+
+.title,.chapterhead,.end {
+	font-weight: bold;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+	text-rendering: optimizeSpeed;
+}
+
+.title {
+	font-size: 1.875em;
+	line-height: 1.5em;
+}
+
+.chapterhead,.end {
+	font-size: 1.666em;
+}
+
+.author, .chaptersubhead, .subtitle, .date {
+	font-size: 1.5em;
+}
+
+.subsubtitle, .publisher, .translator {
+	font-size: 1.25em;
+}
+
+.author {
+	font-weight: bold;
+	text-transform: capitalize;
+	margin-top:1em;
+}
+
+.chaptersubhead, .subtitle, .date {
+	font-style: italic;
+}
+
+p.date, p.translator, p.publisher {
+	margin-top:1em;
+}
+
+p.title + p.subtitle {
+	margin-top:-0.5em;
+}
+
+p.chapterhead + p.chaptersubhead {
+	margin-top:-1em;
+}
+
+p.subsubtitle + p.translator {
+	margin-top:-1em;
+}
+
+p.translator + p.publisher {
+	margin-top:-1em;
+}
+
+hr {
+	margin-top:2em;
+	margin-bottom:2em;
+	width:50%;
+}
+
+/* poetry */
+
+.poetry {
+		font-family: "Sorts Mill Goudy";
+}
+
+.poetry .header {
+	margin-bottom: 12em;
+}
+
+.poetry .title {
+	font-weight:normal;
+}
+
+.poetry .author {
+	font-weight:normal;
+}
+
+.poem, .poemsection {
+	padding-left:2em;
+	margin-bottom:12em;
+	max-width:640px;
+	position:static;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+.poem p {
+	margin-left:1.5em;
+	text-indent:-1.5em;
+}
+
+.poemsectiontitle {
+	font-size:1.8em;
+	text-align:center;
+	font-style:italic;
+	margin-bottom:3.333em;
+}
+
+.poemtitle {
+	font-size:1.8em;
+	text-align:left;
+	font-size:1.8em;
+	margin-bottom:1.666em;
+	margin-left:1.666em;
+}
+
+.poemsubtitle {
+	text-align:left;
+	font-style:italic;
+	margin-top:-2.25em;
+	margin-bottom:2em;
+}
+
+.poem .poemtitle {
+	margin-left:1.5em;
+	text-indent:0;
+}
+
+.poem .poemsubtitle {
+	margin-left:2em;
+	text-indent:0;
+}
+
+
+
+.epigraph {
+	font-style:italic;
+	margin-bottom:3em;
+	margin-left:3em;
+}
+
+.epigraph p {
+	margin-left:0;
+	text-indent:0;
+}
+
+.stanza {
+	margin-bottom:2em;
+}
+
+.stanzagroup {
+	margin-bottom:2em;
+}
+
+.stanzahead {
+	text-indent:1em;
+	text-align:left;
+	margin-bottom:1em;
+}
+
+.stanzasubhead {
+	font-style:italic;
+	text-indent:1em;
+	text-align:left;
+	margin-top:-1em;
+	margin-bottom:1em;
+}
+
+
+.oneem {
+	margin-right:1em;
+}
+
+.twoem {
+	margin-right:2em;
+}
+
+.fiveem {
+	margin-right:5em;
+}
+
+
+.droppedtext {
+	display:inline-block;
+	position:relative;
+	top:1.5em;
+	height:3em;
+}
+
+.droppedtext2 {
+	display:inline-block;
+	position:relative;
+	top:3em;
+	height:4.5em;
+}
+
+
+/* toc-specific formatting */
+
+.toc {
+	position:fixed;
+	float:left;
+	top:0px;
+	width:180px;
+	background:rgba(255,255,255,1);
+	z-index:2;
+	padding-left:10px;
+	padding-top:10px;
+	padding-bottom:10px;
+	border-top-left-radius: 20px;
+	border-bottom-left-radius: 20px;
+	min-height:2.4em;
+
+	font-family: "Helvetica Neue", "Helvetica", "Arial";
+	font-size: 0.6666em;
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-epub-hyphens: none;
+	hyphens: none;
+}
+
+
+
+.tochead {
+	font-family: "Helvetica Neue", "Helvetica", "Arial";
+	text-align:left;
+	position:fixed;
+	margin-left:10px;
+	font-size: 1.666em;
+	font-weight: bold;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+}
+
+.toc ol {
+	text-align:left;
+	font-size: 0.8em;
+	margin-top:4em;
+	max-height:800;
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
+
+.toc ol ol {
+	margin-top:0.3em;
+	font-size:0.7em;
+	margin-left:-2em;
+}
+
+.toc li {
+	line-height:1.2em;
+	margin-bottom:0.3em;
+}
+
+ol.romantoc {
+	list-style-type: upper-roman;
+}
+
+/* progressmeter */
+/* stick this as the last element in .centercolumn */
+
+.progressmeter {
+	position:absolute;
+  left: 720px;
+  top:	0px;
+	width:2px;
+	min-height: 100%;
+	background: rgba(255,255,255,1);
+	background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(0,0,0,1) 100%);
+	background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(255,255,255,1)), color-stop(100%, rgba(0,0,0,1)));
+	background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(0,0,0,1) 100%);
+	background: -o-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(0,0,0,1) 100%);
+	background: -ms-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(0,0,0,1) 100%);
+	background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(0,0,0,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#000000', GradientType=0 );
+}
+
+
+
+/* sidenotes */
+
+/* from here: http://stackoverflow.com/questions/6567095/problem-with-floating-sidenotes-in-css */
+/* usage: <span class="tnote"></span><span class="floatnote"><span class="snote"></span> Thomas D&rsquo;Arcy McGee. (J.V.)</span>  */
+/* */
+/* Or try these: http://fransdejonge.com/wp-content/uploads/2010/01/sidenotes.html */
+/* or take the ones from here: http://www.newrepublic.com/article/112836/saul-friedlanders-franz-kafka-reviewed-billy-giraldi */
+
+.tnote {
+    counter-increment:txtnote;
+    text-indent: 0;
+  }
+
+.tnote:after {
+    position: relative;
+    vertical-align: baseline;
+    top: -0.5em;
+    padding-left: 2px;
+    font-size: 75%;
+    color:red;
+    content: counter(txtnote);
+  }
+/*
+.floatnote {
+    position: relative;
+    background:white;
+    padding: 0 0 0 0;
+    display: block;
+    width: 250px;
+    clear: right;
+    float: right;
+    font-size:75%;
+    text-indent:0;
+}
+*/
+
+.floatnote {
+	position:relative;
+	display:block;
+	float:right;
+	z-index:1;
+
+  top:-1.3em;
+  right:-420px;
+  width:370px;
+  margin-left:-380px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-right:10px;
+
+  border-top-right-radius:10px;
+	border-bottom-right-radius:10px;
+
+	border-color:#dddddd;
+	border-width:1px;
+	border-style: solid solid solid none;
+
+  font-size:75%;
+  text-indent:-25px;
+  line-height:1.25em;
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-epub-hyphens: none;
+	hyphens: none;
+
+	background:white;
+
+	-webkit-box-shadow: 0px -10px 5px -5px rgba(255,255,255,0.5);
+	-moz-box-shadow: 0px -10px 5px -5px rgba(255,255,255,0.5);
+	box-shadow: 0px -10px 5px -5px rgba(255,255,255,0.5);
+
+/*	background: rgba(255,255,255,1);
+	background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(255,255,255,0.25) 100%);
+	background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(255,255,255,1)), color-stop(100%, rgba(255,255,255,0.25)));
+	background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(255,255,255,0.25) 100%);
+	background: -o-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(255,255,255,0.25) 100%);
+	background: -ms-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(255,255,255,0.25) 100%);
+	background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,0.25) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff', GradientType=0 ); */
+
+}
+
+.floatnote:hover {
+	z-index:99;
+	background:white;
+}
+
+.floatnote > span {
+    text-align: left;
+    line-height: 1.17em;
+}
+
+.snote {
+    counter-increment: sdnote;
+    text-indent: 0;
+    width:25px;
+    display:inline-block;
+  }
+
+.snote:after {
+    position: relative;
+    vertical-align: baseline;
+    top: 0;
+    padding-left: 2px;
+    font-size: 100%;
+    color: red;
+    content: counter(sdnote);
+  }
+
+.footnotelink {
+	color:black;
+}
+
+.footnotelink:hover {
+		text-decoration: none;
+}
