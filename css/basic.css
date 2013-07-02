@@ -549,4 +549,10 @@ ol.noprefix {
     content: counter(sdnote);
   }
 
+.footnotelink {
+	color:black;
+}
 
+.footnotelink:hover {
+		text-decoration: none;
+}
