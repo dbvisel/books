@@ -49,13 +49,13 @@ body {
 	hyphens: auto;
 }
 
-.header {
-
+.section {
+	margin-top:8em;
 }
 
 .chapter {
-	z-index:1;
 	margin-top:4em;
+	z-index:1;
   counter-reset: sdnote txtnote 
 }
 
@@ -126,6 +126,10 @@ em {
 	font-style:italic;
 }
 
+em em {
+	font-style:normal;
+}
+
 .smallcaps {
 /*	font-variant:small-caps; */
 	font-size:smaller;
@@ -163,7 +167,7 @@ a:hover {
 
 /* headers */
 
-.title, .subtitle, .subsubtitle, .author, .chapterhead, .chaptersubhead, .date, .end, .translator, .publisher { 
+.title, .subtitle, .subsubtitle, .author, .sectionhead, .chapterhead, .chaptersubhead, .date, .end, .translator, .publisher { 
 	text-align: center;
 	text-indent: 0;
 	margin-bottom: 1em;
@@ -176,7 +180,7 @@ a:hover {
 	hyphens: none;
 }
 
-.title,.chapterhead,.end {
+.title,.sectionhead,.chapterhead,.end {
 	font-weight: bold;
 	letter-spacing: 0.2em;
 	text-transform: uppercase;
@@ -190,6 +194,11 @@ a:hover {
 
 .chapterhead,.end {
 	font-size: 1.666em;
+}
+
+.sectionhead {
+	font-size:2em;
+	color:red;
 }
 
 .author, .chaptersubhead, .subtitle, .date {
@@ -378,6 +387,7 @@ hr {
 	padding-bottom:10px;
 	border-top-left-radius: 20px;
 	border-bottom-left-radius: 20px;
+	min-height:2.4em;
 
 	font-family: "Helvetica Neue", "Helvetica", "Arial";
 	font-size: 0.6666em;
@@ -387,18 +397,15 @@ hr {
 	hyphens: none;
 }
 
-
-
-.toc .chapterhead {
+.tochead {
+	font-family: "Helvetica Neue", "Helvetica", "Arial";
 	text-align:left;
 	position:fixed;
 	margin-left:10px;
-/*	-webkit-transform: rotate(-90deg); 
-	-moz-transform: rotate(-90deg);	
-	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
-	position:relative;
-	left:-40px;
-	top:40px; */
+	font-size: 1.666em;
+	font-weight: bold;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
 }
 
 .toc ol {
@@ -407,11 +414,23 @@ hr {
 	margin-top:4em;
 	max-height:800;
 	overflow-x: hidden;
-	overflow-y: hidden;
+	overflow-y: auto; 
+}
+
+ol.romantoc {
+	list-style-type: upper-roman;
+}
+
+ol.noprefix {
+	list-style-type: none;
+	padding-left:10px;
+	margin-left:1em;
+	text-indent:-1em;
 }
 
 .toc ol ol {
 	margin-top:0.3em;
+	margin-bottom: 0.6em;
 	font-size:0.7em;
 	margin-left:-2em;
 }
@@ -421,9 +440,6 @@ hr {
 	margin-bottom:0.3em;
 }
 
-ol.romantoc {
-	list-style-type: upper-roman;
-}
 
 /* progressmeter */
 /* stick this as the last element in .centercolumn */
