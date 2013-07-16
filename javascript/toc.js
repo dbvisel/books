@@ -1,13 +1,11 @@
-/* MY GRAND JAVASCRIPT FILE */
+/***** MY GRAND JAVASCRIPT FILE */
 
-// Deal with Timoleon (kind of a mess!)
+// probably this should be moved over to jQuery?
 
-
-
-/* OTHER PEOPLE'S THINGS/GENERAL */
+/***** OTHER PEOPLE'S THINGS/GENERAL */
 
 function getByClass (className, parent) {
-/* from http://stackoverflow.com/questions/3808808/how-to-get-element-by-class-in-javascript */
+// from http://stackoverflow.com/questions/3808808/how-to-get-element-by-class-in-javascript 
   parent || (parent=document);
   var descendants=parent.getElementsByTagName('*'), i=-1, e, result=[];
   while (e=descendants[++i]) {
@@ -17,7 +15,7 @@ function getByClass (className, parent) {
 }
 
 function next(elem) {
-/* from http://stackoverflow.com/questions/868407/hide-an-elements-next-sibling-with-javascript */
+// from http://stackoverflow.com/questions/868407/hide-an-elements-next-sibling-with-javascript 
     do {
         elem = elem.nextSibling;
     } while (elem && elem.nodeType !== 1);
@@ -31,182 +29,29 @@ function previous(elem) {
     return elem;        
 }
 
-
-
-
 function textcleaner(text) {
-  	var dummy = text.replace(/<br\s*[\/]?>/gi," ");
+		var dummy = text.replace(/<br\s*[\/]?>/gi," ");
 		return dummy;
 }
 
-/* GLOBAL VARIABLES */
 
-var numbersoff = false;  
+/***** GLOBAL VARIABLES */
 
+var indexednodes = new Array("header", "section", "chapter", "poem", "acknowledgements", "dedication");
+var indexedparentnodes = new Array("section");
+var toccednodes = new Array("section", "chapter","poem");
+var toccednodesheaders = new Array("sectionhead","chapterhead", "poemtitle");
+var toccednodessubheaders = new Array("sectionsubhead", "chaptersubhead", "poemsubtitle");
 
-
-/* SHOW/HIDE FOOTNOTES */
-
-function showfootnote(reference) {
-	var footnoteid = 'callout'+reference;
-	var footnotecallout = document.getElementById(footnoteid);
-	var footnotenext = footnotecallout.nextSibling.firstChild;
-	if(footnotenext.style.visibility == 'visible') {
-		footnotenext.style.visibility = 'hidden';
-	}	else {
-		footnotenext.style.visibility = 'visible';
-	}
-}
-
-function hidefootnote(reference) {
-	var footnoteid = 'footnote'+reference;
-	var footnotewrapper = document.getElementById(footnoteid);
-	footnotewrapper.firstChild.style.visibility = 'hidden';
-}
+var nodeslist = new Array();
+var toclist = new Array();
+var toctextlist = new Array();
+var currentnode = "";
 
 
+/***** INDEX/SHOW/HIDE FOOTNOTES */
 
-/* TABLES OF CONTENTS */
-
-
-// Deal with scrollbars (Martin Eden)
-// Deal with Timoleon (kind of a mess!)
-
-
-function makelist(headerlist,subelement) {
-	var output = "";
-	for(i in headerlist) {
-		var thischapterhead = headerlist[i];
-		var thischapter = thischapterhead.parentNode;
-		var thischaptertext = thischapterhead.innerHTML;
-		var thischapterid = thischapter.id;
-		output = output + '<li><a href="#'+thischapterid+'">' + thischaptertext + "</a></li>\n";
-		if(subelement) {
-			var subheaderlist = getByClass(subelement,thischapter);
-	    if(subheaderlist[0]) {
-	      	output = output + "\n<ol>" + makelist(subheaderlist) + "</ol>\n";
-	    }
-		}
-	}
-	output = textcleaner(output);
-	return output;
-}
-
-function makelistsubtitles(headerlist,subheader) {
-
-/* integrate this back into the other one? */
-
-	var output = "";
-	var thischaptertext = "";
-	var subheaderlist = getByClass(subheader,document);
-
-	for(i in headerlist) {
-		thischapterhead = headerlist[i];
-		thischaptertext = thischapterhead.innerHTML;
-
-		// check if the chapter name starts with "chapter"; if so, ditch numbering
-		if(thischaptertext.substring(0,7).toLowerCase()=="chapter") {
-			numbersoff = true;
-		} 
-
-		thischapter = thischapterhead.parentNode;
-		thischapterid = thischapter.id;
-
-		if(subheaderlist[0]) {
-			numbersoff = true;
-			nextelement = next(thischapterhead);
-			if(nextelement.className==subheader) {
-				thissubheadtext = nextelement.innerHTML;
-
-				if(thissubheadtext.substring(0,1)=="(") {
-					thischaptertext = thischaptertext + ' ' + thissubheadtext;
-				} else {
-					thischaptertext = thischaptertext + ': '+thissubheadtext;
-				}
-			}
-		}
-
-		output = output + '<li><a href="#'+thischapterid+'">' + thischaptertext + "</a></li>\n";
-	}
-	output = textcleaner(output);
-	return output;
-}
-
-
-/* flip toc on and off */
-
-function createtoc() {
-	var tocsection = getByClass("toc",document)[0];
-	var existingtoc = document.getElementById("insertedtoc");
-	if(existingtoc) {
-    // toc exists, remove it
-    tocsection.removeChild(existingtoc);
-  } else {
-    // create toc section
-    var sectionheads = getByClass("sectionhead",document);
-    var poemtitles = getByClass("poemtitle",document);
-    var everything = "";
-
-    if(poemtitles[0]) {
-    	everything = everything + makelistsubtitles(poemtitles,"poemsubtitle");
-    } else {
-
-	    if(sectionheads[0]) {
-	     // if there are sectionheads, make indented list
-
-	    	everything = everything + makelist(sectionheads,"chapterhead");
-		  } else {
-		  	//use single-layer list for chapterheads
-		    var chapterheads = getByClass("chapterhead",document);
-			  if(chapterheads[0]) {
-			  	everything = everything + makelistsubtitles(chapterheads,"chaptersubhead");
-			  } else {
-			  		alert("no chapter heads");
-			  }
-			}
-
-		}
-		  
-	    var tocinsert = document.createElement("ol");
-	    if(numbersoff) {
-	    	tocinsert.setAttribute("class","noprefix")
-	    } else {
-		  	tocinsert.setAttribute("class","romantoc");
-		  }
-		  tocinsert.setAttribute("id","insertedtoc");
-		  tocinsert.innerHTML = everything;
-
-		  tocsection.appendChild(tocinsert);
-
-	
-  }
-}
-
-/* initialize */
-
-window.onload = function startup() {
-	// hide toc if no sectionheads, poemtitles, or chapterheads
-	var tocsection = getByClass("toc",document)[0];
-  var sectionheads = getByClass("sectionhead",document);
-  var poemtitles = getByClass("poemtitle",document);
-	var chapterheads = getByClass("chapterhead",document);
-	if(sectionheads[0] || poemtitles[0] || chapterheads[0] ) {
-		tocsection.style.display = "block";
-	} else {
-		tocsection.style.display = "none";		
-	}
-	// Create toc link – this vacuums out tocheader's content
-	// Maybe have this insert all of TOC section? Could be useful later.
-
-	var tocheader = tocsection.firstChild;
-	tocheader.innerHTML = "";
-	var a = document.createElement('a')
-	a.setAttribute('href','javascript:createtoc();');
-	a.innerHTML = "Contents";
-	tocheader.appendChild(a);
-
-	// hide all footnotes + create anchors + ids
-
+function indexfootnotes() {
 	var footnotes = getByClass("floatnote", document);
 	for(i in footnotes) {
 		var thisfootnote = footnotes[i];
@@ -229,8 +74,278 @@ window.onload = function startup() {
 		footnotehref= 'javascript:hidefootnote('+i+');';
 		footnotelink.setAttribute('href',footnotehref);
 		footnotelink.setAttribute('class',"footnotelink");
-
 	}
-
 }
 
+function showfootnote(reference) {
+	var footnoteid = 'callout'+reference;
+	var footnotecallout = document.getElementById(footnoteid);
+	var footnotenext = footnotecallout.nextSibling.firstChild;
+	if(footnotenext.style.visibility == 'visible') {
+		footnotenext.style.visibility = 'hidden';
+	}	else {
+		footnotenext.style.visibility = 'visible';
+	}
+}
+
+function hidefootnote(reference) {
+	var footnoteid = 'footnote'+reference;
+	var footnotewrapper = document.getElementById(footnoteid);
+	footnotewrapper.firstChild.style.visibility = 'hidden';
+}
+
+/***** NAVIGATION */
+
+// this would probably be much simpler in jquery
+// from http://www.webdeveloper.com/forum/showthread.php?97938-function-to-jump-to-anchor-on-key-press
+
+// first: go through & index all the nodes (sections, chapters, poems, poemsections)
+// second: figure out where the reader is
+// third: register left or right arrow presses & go to previous or next node
+
+function loopnodes(startingelement, nodecount, idprefix) {
+	var allchildren = startingelement.childNodes;
+	for(i in allchildren) {
+		currentclass = allchildren[i].className;
+		if(currentclass) {
+			for(j in indexednodes) {
+				if(currentclass == indexednodes[j]) {
+					// make an id for the element
+
+					generatedid = idprefix + allchildren[i].className + nodecount + "-gen";
+					allchildren[i].setAttribute("id",generatedid);
+					nodeslist[nodecount] = allchildren[i].id;
+					nodecount ++;
+
+					// if toc node, add it to the list
+
+					for(k in toccednodes) {
+						if(currentclass==toccednodes[k]) {
+							currentheader = getByClass(toccednodesheaders[k],allchildren[i])[0];
+							if(currentheader) {
+								toclist.push(allchildren[i].id);
+								var output = textcleaner(currentheader.innerHTML);
+								// check if there's a subheader
+								currentsubheader = getByClass(toccednodessubheaders[k],allchildren[i])[0];
+								if(currentsubheader) {
+									if(currentsubheader.innerHTML.substring(0,1)=='(') {
+										output = output + " " + textcleaner(currentsubheader.innerHTML);
+									} else {
+										output = output + ": " + textcleaner(currentsubheader.innerHTML);
+									}
+								}
+								toctextlist.push(output);
+							}
+						}
+					}
+					for(k in indexedparentnodes) {
+						if(currentclass ==indexedparentnodes[k]) {
+							nodecount = loopnodes(allchildren[i],nodecount,"indent-");
+						}
+					}
+				}
+			}
+		}
+	}
+	return nodecount;
+}
+
+
+function indexnodes() {
+	//loop through "centercolumn", get all "header", "chapter", "section", "poem"
+	var centercolumn = getByClass("centercolumn",document)[0];
+	loopnodes(centercolumn, 0, "");
+	currentnode = nodeslist[0];
+}
+
+
+
+function showall() {
+	for(i in nodeslist) {
+		var nodename = document.getElementById(nodeslist[i]);
+		nodename.style.display = 'block'
+	}
+	document.getElementById(currentnode).scrollIntoView();
+	//
+	// One problem: this doesn't show sectionheads, which we should probably treat differently. How?
+	//
+	sections = getByClass("sectionhead",document);
+	if(sections) {
+		for(j in sections) {
+			sections[j].style.display = 'block';
+		}
+	}
+}
+
+
+function setsection(nodeid) {
+
+// turn off everything
+
+	currentnode = nodeid;
+	for(i in nodeslist) {
+		var nodename = document.getElementById(nodeslist[i]);
+		nodename.style.display = 'none';
+	}
+
+// turn off sectionheads
+
+  sections = getByClass("sectionhead",document);
+  if(sections) {
+		for(j in sections) {
+			sections[j].style.display = 'none';
+		} 	
+  }
+  // are we indented? If so, turn on parent.
+
+  if(nodeid.substring(0,7) == "indent-") {
+  	var k = nodeslist.indexOf(nodeid);
+  	while(nodeslist[k].substring(0,7) == "indent-") {
+  		k--;
+  	}
+  	var parentsection = document.getElementById(nodeslist[k]);
+  	parentsection.style.display = 'block';
+  }
+
+	// are we a section? if so, turn on sectionhead.
+	if(nodeid.substring(0,7) == "section") {
+		var currentsection = document.getElementById(nodeid);
+		currentsection.style.display = 'block';
+		var sectionhead = getByClass('sectionhead',currentsection)[0];
+		sectionhead.style.display = 'block';
+	}
+
+	// turn on current section
+
+	nodename = document.getElementById(nodeid);
+	nodename.style.display = 'block'
+	document.getElementById(currentnode).scrollIntoView();
+}
+
+
+function decipher() {
+		if (event.type == "keydown") {
+		   if (event.charCode) {
+		      var charCode = event.charCode;
+		   }
+		   else {
+		      var charCode = event.keyCode;
+		   }
+		}
+		var nodeposition = nodeslist.indexOf(currentnode);
+	  switch (charCode) {
+	    case 37:
+	    	if(nodeposition > 0) {
+	    		nodeposition--;
+	   			currentnode = nodeslist[nodeposition]; 		
+	    		setsection(currentnode);
+	    	}
+	    	break;
+	    case 39: 
+	    	if((nodeposition+1) < nodeslist.length) {
+	    		nodeposition++;
+	   			currentnode = nodeslist[nodeposition]; 		
+	    		setsection(currentnode);
+	    	}
+	  }
+	};
+
+
+/***** TABLES OF CONTENTS */
+
+// flip toc on and off 
+
+function createtoc() {
+	var tocsection = getByClass("toc",document)[0];
+	var existingtoc = document.getElementById("insertedtoc");
+	if(existingtoc) {
+    // toc exists, remove it
+    tocsection.removeChild(existingtoc);
+  } else {
+    // create toc section
+
+    var everything = "";
+    for(i in toclist) {
+//    	currentsection = document.getElementById(toclist[i]);
+	    if((toclist[i].substring(0,7)) == "indent-") {
+	    	if(toctextlist[i].length < 3) {
+		    	liclass = ' class="inline"';
+	    	} else {
+	    		liclass = ' class="indented"'
+	    	}
+	    } else {
+	    	liclass = ' class="regular"';
+	    }
+	    var output = '<li' +liclass + '><a href="#'+toclist[i]+'" onClick="javascript:setsection(\''+toclist[i]+'\');">' + toctextlist[i] + "</a></li>\n";
+	    everything = everything + output;
+    }
+
+    // insert the ol element with the text
+
+    everything = everything + '<li class="tocbottom" onClick="javascript:showall();">Show all</li>';
+
+	  var tocinsert = document.createElement("ol");
+		tocinsert.setAttribute("id","insertedtoc");
+		tocinsert.innerHTML = everything;
+
+		tocsection.appendChild(tocinsert);
+  }
+}
+
+
+function initializetoc() {
+	
+	// hide toc if toclist < 2	
+
+	var tocsection = getByClass("toc",document)[0];
+	if(toclist.length > 1) {
+		tocsection.style.display = "block";
+
+		// Create toc link – this vacuums out tocheader's content
+		// Maybe have this insert all of TOC section? Could be useful later.
+
+		var tocheader = tocsection.firstChild;
+		tocheader.innerHTML = "";
+		var a = document.createElement('a')
+		a.setAttribute('href','javascript:createtoc();');
+		a.innerHTML = "Contents";
+		tocheader.appendChild(a);
+	} else {
+		tocsection.style.display = "none";		
+	}
+}
+
+function initializekeys() {
+	document.body.addEventListener("keydown", function(event) {
+		decipher();
+			},false);
+}
+
+
+
+
+/***** INITIALIZE */
+
+window.onload = function startup() {
+
+	// create ids for all structural elements: arrays are nodeslist and toclist
+
+	indexnodes();
+
+	// process footnotes: create anchors + ids, hide them.
+
+	indexfootnotes();
+
+	// initialize the table of contents
+
+	initializetoc();
+
+	// turn on the key listener
+
+	initializekeys();
+
+	// only show the first section.
+
+	setsection(currentnode);
+
+};
