@@ -6,6 +6,9 @@
 # 2) Table of contents in left column? Javascript?
 # 3) Running headers of some sort?
 #
+# table of contents sometimes needs to grow scroll bars (Martin Eden)
+
+#
 #
 */
 
@@ -59,6 +62,9 @@ body {
   counter-reset: sdnote txtnote 
 }
 
+.dedication, .acknowledgements {
+	margin-top:4em;
+}
 
 
 /* paragraphs */
@@ -97,6 +103,10 @@ p.divider + p {
 	text-indent:0;
 }
 
+p.a-head + p {
+	text-indent:0;
+}
+
 .rightaligned {
 	text-align:right;
 }
@@ -114,6 +124,15 @@ p.divider + p {
 	text-align:center;
 	margin-top:1.5em;
 	margin-bottom:1.5em;
+	letter-spacing:20px;
+}
+
+.divider:after {
+	content:"* * * * *";
+}
+
+p + p.divider {
+	margin-top:1.5em;
 }
 
 /* character formats */
@@ -167,7 +186,7 @@ a:hover {
 
 /* headers */
 
-.title, .subtitle, .subsubtitle, .author, .sectionhead, .chapterhead, .chaptersubhead, .date, .end, .translator, .publisher { 
+.title, .subtitle, .subsubtitle, .author, .sectionhead, .chapterhead, .chaptersubhead, .date, .end, .translator, .publisher, .a-head { 
 	text-align: center;
 	text-indent: 0;
 	margin-bottom: 1em;
@@ -180,7 +199,7 @@ a:hover {
 	hyphens: none;
 }
 
-.title,.sectionhead,.chapterhead,.end {
+.title,.chapterhead,.end {
 	font-weight: bold;
 	letter-spacing: 0.2em;
 	text-transform: uppercase;
@@ -197,11 +216,11 @@ a:hover {
 }
 
 .sectionhead {
+	font-style:italic;
 	font-size:2em;
-	color:red;
 }
 
-.author, .chaptersubhead, .subtitle, .date {
+.author, .chaptersubhead, .subtitle, .date, .a-head {
 	font-size: 1.5em;
 }
 
@@ -215,7 +234,7 @@ a:hover {
 	margin-top:1em;
 }
 
-.chaptersubhead, .subtitle, .date {
+.chaptersubhead, .subtitle, .date, .a-head {
 	font-style: italic;
 }
 
@@ -263,7 +282,7 @@ hr {
 	font-weight:normal;
 }
 
-.poem, .poemsection {
+.poem {
 	padding-left:2em;
 	margin-bottom:12em;
 	max-width:640px;
@@ -275,13 +294,6 @@ hr {
 .poem p {
 	margin-left:1.5em;
 	text-indent:-1.5em;
-}
-
-.poemsectiontitle {
-	font-size:1.8em;
-	text-align:center;
-	font-style:italic;
-	margin-bottom:3.333em;
 }
 
 .poemtitle {
@@ -412,33 +424,53 @@ hr {
 	text-align:left;
 	font-size: 0.8em;
 	margin-top:4em;
+	margin-left:10px;
 	max-height:800;
 	overflow-x: hidden;
-	overflow-y: auto; 
-}
-
-ol.romantoc {
-	list-style-type: upper-roman;
-}
-
-ol.noprefix {
+	overflow-y: hidden; 
 	list-style-type: none;
-	padding-left:10px;
-	margin-left:1em;
-	text-indent:-1em;
+	-webkit-padding-start: 0;
 }
 
-.toc ol ol {
-	margin-top:0.3em;
-	margin-bottom: 0.6em;
-	font-size:0.7em;
-	margin-left:-2em;
+.toc li.regular {
+	line-height:1.2em;
+	margin-bottom:0.3em;
+	margin-left:2em;
+	text-indent:-2em;
 }
 
-.toc li {
+.toc li.indented {
+	margin-left:4em;
+	text-indent:-2em;
 	line-height:1.2em;
 	margin-bottom:0.3em;
 }
+
+.toc li.tocbottom {
+	line-height:1.2em;
+	margin-top:1em;
+	margin-left:1em;
+	font-style:italic;
+}
+
+
+.toc li.inline {
+	display: inline-block;
+	margin-left:0;
+	text-indent:0;
+}
+
+li.inline + li.regular {
+	margin-top:1em;
+}
+
+li.inline + li.inline:before {
+	content: " · ";
+}
+
+
+
+
 
 
 /* progressmeter */
@@ -478,7 +510,7 @@ ol.noprefix {
 .tnote:after {
     position: relative;
     vertical-align: baseline;
-    top: -0.3em;
+    top: -0.5em;
     padding-left: 2px;
     font-size: 75%;
     color:red;
@@ -504,10 +536,10 @@ ol.noprefix {
 	float:right;
 	z-index:1;
 
-  top:-20px;
-  right:-231px;
-  width:190px;
-  margin-left:-200px;
+  top:-1.3em;
+  right:-420px;
+  width:370px;
+  margin-left:-380px;
   padding-top: 20px;
   padding-bottom: 20px;
   padding-right:10px;
@@ -515,18 +547,38 @@ ol.noprefix {
   border-top-right-radius:10px;
 	border-bottom-right-radius:10px;
 
-  background:white;
+	border-color:#dddddd;
+	border-width:1px;
+	border-style: solid solid solid none;
+
   font-size:75%;
-  text-indent:0px;
-  line-height:1.5em;
+  text-indent:-25px;
+  line-height:1.25em;
 	-webkit-hyphens: none;
 	-moz-hyphens: none;
 	-epub-hyphens: none;
 	hyphens: none;
+
+	background:white;
+
+	-webkit-box-shadow: 0px -10px 5px -5px rgba(255,255,255,0.5);
+	-moz-box-shadow: 0px -10px 5px -5px rgba(255,255,255,0.5);
+	box-shadow: 0px -10px 5px -5px rgba(255,255,255,0.5);
+
+/*	background: rgba(255,255,255,1);
+	background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(255,255,255,0.25) 100%);
+	background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(255,255,255,1)), color-stop(100%, rgba(255,255,255,0.25)));
+	background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(255,255,255,0.25) 100%);
+	background: -o-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(255,255,255,0.25) 100%);
+	background: -ms-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(255,255,255,0.25) 100%);
+	background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,0.25) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff', GradientType=0 ); */
+
 }
 
 .floatnote:hover {
 	z-index:99;
+	background:white;
 }
 
 .floatnote > span {
@@ -537,6 +589,8 @@ ol.noprefix {
 .snote {
     counter-increment: sdnote;
     text-indent: 0;
+    width:25px;
+    display:inline-block;
   }
 
 .snote:after {
@@ -555,4 +609,9 @@ ol.noprefix {
 
 .footnotelink:hover {
 		text-decoration: none;
+}
+
+.notedivider:after {
+	color:red;
+	content: " ¶ ";
 }
