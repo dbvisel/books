@@ -30,6 +30,9 @@ function previous(elem) {
 }
 
 function textcleaner(text) {
+
+// would be nice if this also cleaned out <em>s !
+
 		var dummy = text.replace(/<br\s*[\/]?>/gi," ");
 		return dummy;
 }
@@ -47,6 +50,11 @@ var nodeslist = new Array();
 var toclist = new Array();
 var toctextlist = new Array();
 var currentnode = "";
+var titletext = "";
+var sectioned = true;
+
+var leftarrow = document.createElement('a');
+var rightarrow = document.createElement('a');
 
 
 /***** INDEX/SHOW/HIDE FOOTNOTES */
@@ -183,10 +191,15 @@ function setsection(nodeid) {
 // turn off everything
 
 	currentnode = nodeid;
+	location.hash = nodeid;
 	for(i in nodeslist) {
 		var nodename = document.getElementById(nodeslist[i]);
 		nodename.style.display = 'none';
 	}
+
+// hide arrows, if they exist	
+	document.getElementById("leftarrow").style.visibility = "hidden";
+	document.getElementById("rightarrow").style.visibility = "hidden";
 
 // turn off sectionheads
 
@@ -220,6 +233,46 @@ function setsection(nodeid) {
 	nodename = document.getElementById(nodeid);
 	nodename.style.display = 'block'
 	document.getElementById(currentnode).scrollIntoView();
+
+	// show arrows, if necessary
+
+	var nodeposition = nodeslist.indexOf(currentnode);
+	if(nodeslist[nodeslist.indexOf(nodeid)-1]) {
+		// set previous button
+		var workingarrow = document.getElementById("leftarrow");
+		workingarrow.style.visibility = "visible";
+	   	workingarrow.setAttribute('href','javascript:setsection("'+nodeslist[nodeposition-1]+'");');
+	}
+	if(nodeslist[nodeslist.indexOf(nodeid)+1]) {
+		// set next button
+		var workingarrow = document.getElementById("rightarrow");
+		workingarrow.style.visibility = "visible";
+	   	workingarrow.setAttribute('href','javascript:setsection("'+nodeslist[nodeposition+1]+'");');
+	}
+
+	// set title if chapter
+
+	if(nodename.className === "chapter") {
+		if(getByClass("chapterhead",nodename)[0]) {
+			if(getByClass("chaptersubhead",nodename)[0]) {
+				document.title = titletext + " | " + textcleaner(getByClass("chapterhead",nodename)[0].innerHTML) + ": " + textcleaner(getByClass("chaptersubhead",nodename)[0].innerHTML);
+			} else {
+				document.title = titletext + " | " + textcleaner(getByClass("chapterhead",nodename)[0].innerHTML);
+			}
+		}
+	} else {
+		if(nodename.className === "poem") {
+			if(getByClass("poemtitle",nodename)[0]) {
+				if(getByClass("poemsubtitle",nodename)[0]) {
+					document.title = titletext + " | " + textcleaner(getByClass("poemtitle",nodename)[0].innerHTML) + ": " + textcleaner(getByClass("poemsubtitle",nodename)[0].innerHTML);
+				} else {
+					document.title = titletext + " | " + textcleaner(getByClass("poemtitle",nodename)[0].innerHTML);
+				}
+			} else {
+				document.title = titletext;
+			}
+		}
+	}
 }
 
 
@@ -262,11 +315,11 @@ function createtoc() {
     // toc exists, remove it
     tocsection.removeChild(existingtoc);
   } else {
+
     // create toc section
 
     var everything = "";
     for(i in toclist) {
-//    	currentsection = document.getElementById(toclist[i]);
 	    if((toclist[i].substring(0,7)) == "indent-") {
 	    	if(toctextlist[i].length < 3) {
 		    	liclass = ' class="inline"';
@@ -276,19 +329,25 @@ function createtoc() {
 	    } else {
 	    	liclass = ' class="regular"';
 	    }
+	    console.log(toclist[i]);
+	    if(toclist[i] === currentnode) {
+	    	liclass = liclass + ' id="currentsection"';
+	    }
 	    var output = '<li' +liclass + '><a href="#'+toclist[i]+'" onClick="javascript:setsection(\''+toclist[i]+'\');">' + toctextlist[i] + "</a></li>\n";
 	    everything = everything + output;
     }
 
     // insert the ol element with the text
 
-    everything = everything + '<li class="tocbottom" onClick="javascript:showall();">Show all</li>';
+    everything = everything + '<li id="tocbottom">Show all</li>';
 
 	  var tocinsert = document.createElement("ol");
 		tocinsert.setAttribute("id","insertedtoc");
 		tocinsert.innerHTML = everything;
 
 		tocsection.appendChild(tocinsert);
+		document.getElementById("tocbottom").setAttribute("onclick", "showall()");
+
   }
 }
 
@@ -303,15 +362,13 @@ function initializetoc() {
 
 		// Create toc link – this vacuums out tocheader's content
 		// Maybe have this insert all of TOC section? Could be useful later.
-
+		tocsection.setAttribute("onclick", "createtoc()");
+		// show the toc be a hover?
 		var tocheader = tocsection.firstChild;
-		tocheader.innerHTML = "";
-		var a = document.createElement('a')
-		a.setAttribute('href','javascript:createtoc();');
-		a.innerHTML = "Contents";
-		tocheader.appendChild(a);
+		tocheader.innerHTML = "Contents";
 	} else {
-		tocsection.style.display = "none";		
+		tocsection.style.display = "none";
+		sectioned = false;
 	}
 }
 
@@ -321,7 +378,39 @@ function initializekeys() {
 			},false);
 }
 
+function initializenav() {
+	var mainsection = getByClass("main",document)[0];
+	var navheader = document.createElement('nav');
+	mainsection.appendChild(navheader);
+	navheader.innerHTML = "";
+	navheader.setAttribute('class','arrows');
+	leftarrow.setAttribute('id','leftarrow');
+	navheader.appendChild(leftarrow);
+	leftarrow.innerHTML = "«";
 
+	rightarrow.setAttribute('id','rightarrow');
+	navheader.appendChild(rightarrow);
+	rightarrow.innerHTML = "»";
+
+}
+
+function initializetitle() {
+	var title = getByClass("title",document)[0];
+	if(title) {
+		titletext = "“" + textcleaner(title.innerHTML) + "”";
+	}
+	var author = getByClass("author",document)[0];
+	if(author) {
+		titletext = textcleaner(author.innerHTML) + ", " + titletext;
+	}
+	document.title = titletext;
+}
+
+function checkurl() {
+	if(window.location.href.indexOf("#") > -1) {
+		currentnode = window.location.href.substring(window.location.href.indexOf("#")+1,window.location.href.length);
+	}
+}
 
 
 /***** INITIALIZE */
@@ -332,6 +421,10 @@ window.onload = function startup() {
 
 	indexnodes();
 
+	// maybe check for a passed node in the URL?
+
+	checkurl();
+
 	// process footnotes: create anchors + ids, hide them.
 
 	indexfootnotes();
@@ -340,12 +433,23 @@ window.onload = function startup() {
 
 	initializetoc();
 
+	// set page title
+
+	initializetitle();
+
+
+	if(sectioned) {
+
+	// initialize the navigation
+
+		initializenav();
+
 	// turn on the key listener
 
-	initializekeys();
+		initializekeys();
 
 	// only show the first section.
 
-	setsection(currentnode);
-
+		setsection(currentnode);
+	}
 };
