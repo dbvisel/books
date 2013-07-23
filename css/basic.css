@@ -2,28 +2,28 @@
 # Ways to improve this:
 #
 # 0) Change to Google Fonts?
-# 1) Make sidenotes appear in right column
-# 2) Table of contents in left column? Javascript?
-# 3) Running headers of some sort?
+# 1) reintegrate sidenotes CSS from basic-notes.css
 #
 # table of contents sometimes needs to grow scroll bars (Martin Eden)
-
-#
 #
 */
 
-/* @import url("http://fonts.googleapis.com/css?family=Sorts+Mill+Goudy:400italic,400&subset=latin,latin-ext");  */
+@import url("http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700");  */
 
 
 /* main sections */
 
+html {
+	height:100%;
+}
 
 body {
-  background: #eeeeee;
+  background: #f8f8f8;
   margin:0;
 	color: black;
 	text-align: left;
 	font-family: "Garamond Premier Pro", "Hoefler Text", "Georgia", serif;
+	height:100%;
 }
 
 .main {
@@ -32,17 +32,16 @@ body {
   width:1080px;
   margin-left:auto;
   margin-right:auto;
+  height:100%;
 }
 
 .centercolumn {
 	position:relative;
   width: 640px;
   left: 180px;
-	min-height: 100%;
+  min-height:100%;
 	background: #fff;
   color: #000;
-  padding-top:80px;   
-  padding-bottom:80px; 
   padding-left:40px;
   padding-right:40px;
   z-index:1;
@@ -52,18 +51,24 @@ body {
 	hyphens: auto;
 }
 
+.header {
+	padding-top:4em;
+	padding-bottom:4em;
+}
+
 .section {
-	margin-top:8em;
+	padding-bottom:8em;
 }
 
 .chapter {
-	margin-top:4em;
 	z-index:1;
+	padding-bottom:4em;
   counter-reset: sdnote txtnote 
 }
 
 .dedication, .acknowledgements {
-	margin-top:4em;
+	z-index:1;
+	padding-bottom:4em;
 }
 
 
@@ -166,7 +171,7 @@ em em {
 }
 
 .sanserif {
-	font-family:"Helvetica Neue", "Helvetica", "Arial";
+	font-family: "Source Sans Pro", "Helvetica Neue", "Helvetica", "Arial";
 	font-size: 100%;
 	line-height: 100%;
 
@@ -284,7 +289,7 @@ hr {
 
 .poem {
 	padding-left:2em;
-	margin-bottom:12em;
+	padding-bottom:12em;
 	max-width:640px;
 	position:static;
 	margin-left:auto;
@@ -389,42 +394,60 @@ hr {
 
 .toc {
 	position:fixed;
-	float:left;
+	left:0;
 	top:0px;
-	width:180px;
-	background:rgba(255,255,255,1);
-	z-index:2;
-	padding-left:10px;
-	padding-top:10px;
-	padding-bottom:10px;
-	border-top-left-radius: 20px;
-	border-bottom-left-radius: 20px;
-	min-height:2.4em;
+	width:300px;
+	background-color:black;
+	background-color:rgba(0,0,0,.1);
 
-	font-family: "Helvetica Neue", "Helvetica", "Arial";
+	z-index:0;
+	padding-left:10px;
+	padding-right:10px;
+	border-bottom-right-radius: 20px;
+	min-height:2.5em;
+
+	font-family: "Source Sans Pro", "Helvetica Neue", "Helvetica", "Arial";
 	font-size: 0.6666em;
+	color:white;
 	-webkit-hyphens: none;
 	-moz-hyphens: none;
 	-epub-hyphens: none;
 	hyphens: none;
 }
 
+.toc:hover {
+	background-color:rgba(0,0,0,.35);
+	z-index:2;
+}
+
+.toc a {
+	color:white;
+}
+
+.toc a:hover {
+	text-decoration:none;
+	color:#cccccc;
+}
+
+.toc #tocbottom:hover {
+	color:#cccccc;
+}
+
 .tochead {
-	font-family: "Helvetica Neue", "Helvetica", "Arial";
 	text-align:left;
 	position:fixed;
-	margin-left:10px;
 	font-size: 1.666em;
 	font-weight: bold;
 	letter-spacing: 0.2em;
 	text-transform: uppercase;
 }
 
+
 .toc ol {
 	text-align:left;
 	font-size: 0.8em;
 	margin-top:4em;
-	margin-left:10px;
+	margin-left:0px;
 	max-height:800;
 	overflow-x: hidden;
 	overflow-y: hidden; 
@@ -446,7 +469,7 @@ hr {
 	margin-bottom:0.3em;
 }
 
-.toc li.tocbottom {
+.toc li#tocbottom {
 	line-height:1.2em;
 	margin-top:1em;
 	margin-left:1em;
@@ -466,6 +489,10 @@ li.inline + li.regular {
 
 li.inline + li.inline:before {
 	content: " · ";
+}
+
+#currentsection a {
+	color:red;
 }
 
 
@@ -490,6 +517,45 @@ li.inline + li.inline:before {
 	background: -ms-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(0,0,0,1) 100%);
 	background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(0,0,0,1) 100%);
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#000000', GradientType=0 );
+}
+
+
+/* navigation */
+
+#leftarrow,#rightarrow {
+	background-color:black;
+	background-color:rgba(0,0,0,.25);
+	color:white;
+	font-family: "Source Sans Pro", "Helvetica Neue", "Helvetica", "Arial";
+	font-weight:bold;
+	font-size:40px;
+	width:50px;
+	height:50px;
+	text-align:center;
+	z-index:99999;
+	position:fixed;
+	bottom:0;
+	padding-bottom:10px;
+}
+
+#leftarrow {
+	border-top-right-radius:10px;
+	left:0;
+}
+
+#leftarrow:hover {
+	text-decoration: none;
+	background-color:rgba(0,0,0,.35);
+}
+
+#rightarrow {
+	border-top-left-radius:10px;
+	right:0;
+}
+
+#rightarrow:hover {
+	text-decoration: none;
+	background-color:rgba(0,0,0,.35);
 }
 
 
