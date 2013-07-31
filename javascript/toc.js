@@ -1,6 +1,7 @@
 /***** MY GRAND JAVASCRIPT FILE */
 
 // probably this should be moved over to jQuery?
+// something still going wrong with titlepages; this messes up arrow keys 
 
 /***** OTHER PEOPLE'S THINGS/GENERAL */
 
@@ -40,10 +41,10 @@ function textcleaner(text) {
 
 /***** GLOBAL VARIABLES */
 
-var indexednodes = new Array("header", "section", "chapter", "poem", "acknowledgements", "dedication");
-var indexedparentnodes = new Array("section");
-var toccednodes = new Array("section", "chapter","poem");
-var toccednodesheaders = new Array("sectionhead","chapterhead", "poemtitle");
+var indexednodes = new Array("header", "section", "chapter", "poem", "acknowledgements", "dedication","act","scene");
+var indexedparentnodes = new Array("section","act");
+var toccednodes = new Array("section", "chapter","poem","act","scene");
+var toccednodesheaders = new Array("sectionhead","chapterhead", "poemtitle","actheader","sceneheader");
 var toccednodessubheaders = new Array("sectionsubhead", "chaptersubhead", "poemsubtitle");
 
 var nodeslist = new Array();
@@ -55,6 +56,65 @@ var sectioned = true;
 
 var leftarrow = document.createElement('a');
 var rightarrow = document.createElement('a');
+
+
+/***** TYPOGRAPHY *******/
+
+
+function typography() {
+
+// first, fix dropped lines; this only works for "speechlines", how can we separate out classes?
+
+	var droppedlines = getByClass("droppedline", document);
+	for(i in droppedlines) {
+		var thisdroppedline = droppedlines[i];
+		var lineclass = "";
+		var thisclass = thisdroppedline.className.split(" ");
+		for (j in thisclass) {
+			if(thisclass[j] != "droppedline") {
+				if(lineclass) {
+					lineclass += " " + thisclass[j];
+				}
+				lineclass = thisclass[j];
+			}
+		}
+
+		var scenenode = thisdroppedline;
+
+		while(!indexednodes.indexOf(scenenode.className)) {
+			scenenode = scenenode.parentNode;
+		}
+		var speechlines = getByClass(lineclass,document);
+		var droppedposition = speechlines.indexOf(thisdroppedline);
+		var previousline = speechlines[droppedposition-1];
+		thisdroppedline.innerHTML = '<span style="visibility:hidden;margin-right:0.5em;">' + previousline.innerHTML + "</span>" + thisdroppedline.innerHTML;
+	}
+
+// line numbering?
+// problem: need to reset for each scene
+	
+	for(k in nodeslist) {
+		var currentsection = document.getElementById(nodeslist[k]);
+
+// if node is not a parent node (act, section), we can index
+
+		if(indexedparentnodes.indexOf(currentsection.className) === -1) {
+
+			var speechlines = getByClass("speechline",currentsection);
+			var j = 0;
+			for(i in speechlines) {
+				j++;
+				if(!(j%5)) {
+
+			  var lninsert = document.createElement("span");
+				lninsert.setAttribute("class","linenumber");
+				lninsert.innerHTML = j;
+				speechlines[i].appendChild(lninsert);
+				}
+			}
+		}
+	}
+}
 
 
 /***** INDEX/SHOW/HIDE FOOTNOTES */
@@ -268,10 +328,24 @@ function setsection(nodeid) {
 				} else {
 					document.title = titletext + " | " + textcleaner(getByClass("poemtitle",nodename)[0].innerHTML);
 				}
-			} else {
-				document.title = titletext;
 			}
-		}
+
+		} else {
+			if(nodename.className === "act") {
+				if(getByClass("actheader",nodename)[0]) {
+					document.title = titletext + " | " + textcleaner(getByClass("actheader",nodename)[0].innerHTML);
+				}
+			} else {
+				if(nodename.className === "scene") {
+					if(getByClass("sceneheader",nodename)[0]) {
+						document.title = titletext + " | " + textcleaner(getByClass("actheader",nodename.parentNode)[0].innerHTML) + ", " + textcleaner(getByClass("sceneheader",nodename)[0].innerHTML);
+					}
+				} else {
+					console.log(nodename.className);
+					document.title = titletext;
+				}
+			}
+		}			
 	}
 }
 
@@ -287,19 +361,47 @@ function decipher() {
 		}
 		var nodeposition = nodeslist.indexOf(currentnode);
 	  switch (charCode) {
-	    case 37:
+	    case 37: // left arrow
 	    	if(nodeposition > 0) {
 	    		nodeposition--;
 	   			currentnode = nodeslist[nodeposition]; 		
 	    		setsection(currentnode);
 	    	}
 	    	break;
-	    case 39: 
+	    case 39: // right arrow
 	    	if((nodeposition+1) < nodeslist.length) {
 	    		nodeposition++;
 	   			currentnode = nodeslist[nodeposition]; 		
 	    		setsection(currentnode);
 	    	}
+	    	break;
+	    case 40: // down arrow
+	    case 34: // pagedown
+	    	if((window.innerHeight + document.body.scrollTop) === document.body.offsetHeight) {
+		    	if((nodeposition+1) < nodeslist.length) {
+		    		nodeposition++;
+		   			currentnode = nodeslist[nodeposition]; 		
+		    		setsection(currentnode);
+		        event.stopPropagation();
+        		event.preventDefault();
+		    	}
+	    		break;
+	    	} else {
+	    		break;
+	    	}
+	    case 38: //up arrow
+	    case 33: //pageup
+	    	if(document.body.scrollTop === 0) {
+	    		if(nodeposition > 0) {
+	    			nodeposition--;
+	   				currentnode = nodeslist[nodeposition]; 		
+	    			setsection(currentnode);
+	    			document.body.scrollTop = document.body.scrollHeight;
+		        event.stopPropagation();
+        		event.preventDefault();
+	    		}
+	    	}
+	    	break;
 	  }
 	};
 
@@ -425,6 +527,10 @@ window.onload = function startup() {
 
 	checkurl();
 
+	// process dropped lines
+
+	typography();
+
 	// process footnotes: create anchors + ids, hide them.
 
 	indexfootnotes();
@@ -452,4 +558,5 @@ window.onload = function startup() {
 
 		setsection(currentnode);
 	}
+
 };
